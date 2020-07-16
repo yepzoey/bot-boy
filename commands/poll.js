@@ -36,10 +36,10 @@ module.exports = {
   description: "```" + 'Ask a polling question. Vote by emoji reaction. Question and options must be wrapped in double quotes. Questions with no provided options are treated as Yes / No / Unsure questions.' + "```",
   example: '"Thoughtful question here?" "Optional Answer A" "Optional Answer B"',
   handler: (message) => {
-    let args = message.content.match(/"(.+?)"/g);
+    let args = message.content.match(/“(.+?)”|"(.+?)"/g);
     if (args) {
       if (args.length === 1) { // yes no unsure question
-        const question = args[0].replace(/"/g, '');
+        const question = args[0].replace(/“|”|"/g, '');
         pollLog[message.author.id] = {
           lastPoll: Date.now()
         };
@@ -54,7 +54,7 @@ module.exports = {
             message.delete({ timeout: 1000 });
           });
       } else { // multiple choice
-        args = args.map(a => a.replace(/"/g, ''));
+        args = args.map(a => a.replace(/“|”|"/g, ''));
         const question = args[0];
         const questionOptions = [...new Set(args.slice(1))];
         if (questionOptions.length > 20) {
