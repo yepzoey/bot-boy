@@ -58,7 +58,8 @@ module.exports = {
         const question = args[0];
         const questionOptions = [...new Set(args.slice(1))];
         if (questionOptions.length > 20) {
-          return message.channel.send(`${message.author} Polls are limited to 20 options.`);
+          message.channel.send(`${message.author} Polls are limited to 20 options.`);
+          message.delete({ timeout: 1000 });
         }
         else {
           pollLog[message.author.id] = {
